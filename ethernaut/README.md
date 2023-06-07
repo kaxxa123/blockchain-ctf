@@ -21,7 +21,11 @@ npm i dotenv
 truffle init
 ```
 
-Copy over [truffle-config.js](./truffle-config.js) to project sub-folder.
+Copy file:
+
+```BASH
+cp ./truffle-config.js ./project/
+```
 
 <BR />
 
@@ -40,5 +44,15 @@ npm i --save-dev ts-node
 npm i --save-dev @types/node
 npm i dotenv
 ```
+
+Copy Files:
+
+```BASH
+cp ./environment.d.ts  ./project/scripts/
+cp ./hardhat.config.ts ./project/
+```
+
+Once the challenge is deployed update block number value for forking goerli at ``hardhat.config.ts``
+
 
 <BR />
