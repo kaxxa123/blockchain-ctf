@@ -29,7 +29,7 @@ const config: HardhatUserConfig = {
             url: `https://goerli.infura.io/v3/${PROJECT_ID}`,
             chainId: 5,
             //Identical entries will be filtered!
-            accounts: [`${PRIVATE_KEY_1}`]
+            accounts: [`${PRIVATE_KEY_1}`, `${PRIVATE_KEY_2}`]
         },
 
     }
