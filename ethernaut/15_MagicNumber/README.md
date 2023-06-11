@@ -218,8 +218,7 @@ Looking at the first 10 opcodes...
 |`fe`    | `INVALID`     | `[]`                      |       |
 
 
-Working with this doesn't work. The challenge says 10 opcodes but it actually means 10 bytes so we have to count the operands as well!
-We shorting the code further as follows:
+Working with this doesn't work. The challenge says 10 opcodes but it actually means 10 bytes so we have to count the operands as well! We shorten the code further as follows:
 
 
 |byte(s) | opcode operand| stack after [top, bottom] | Notes |
@@ -232,7 +231,7 @@ We shorting the code further as follows:
 |`f3`    | `RETURN`      | `[]`                      | Return the data stored in memory starting from offset `40` with length `20`. |
 
 
-Thus we only seem to need the first `0x0a` bytes: <BR />
+Thus we only seem to need these `0x0a` bytes: <BR />
 `00 01 02 03 04 05 06 07 08 09 0a 0b 0c 0d 0e 0f` <BR />
 `60 2a 60 40 52 60 20 60 40 f3`
 
@@ -280,6 +279,21 @@ magic = await MagicFactory.attach('0xC63BA2aCE8BBf7E4151062bEf083cC34DA896FA1')
 
 await magic.connect(accounts[0]).setSolver(attack.address)
 await magic.solver()
+```
+
+An alternative way to deploy the contract is the following. This is nice as it shows how all it takes is to send the byte code to the `null` address.
+
+```JS
+accounts = await ethers.getSigners()
+
+byteCode = "0x6080604052600a8060116000396000f3fe602a60405260206040f3"
+trn = await accounts[0].sendTransaction({to: null, data: byteCode})
+
+//Get the transaciton has to look it up in etherscan.io
+trn.hash
+
+//Get the address of the newly created contract
+trn.creates
 ```
 
 <BR />
