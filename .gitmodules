@@ -4,3 +4,6 @@
 [submodule "ethernaut/16_AlienCodex/lib/openzeppelin-contracts"]
 	path = ethernaut/16_AlienCodex/lib/openzeppelin-contracts
 	url = https://github.com/OpenZeppelin/openzeppelin-contracts
+[submodule "ethernaut/17_Denial/lib/forge-std"]
+	path = ethernaut/17_Denial/lib/forge-std
+	url = https://github.com/foundry-rs/forge-std
