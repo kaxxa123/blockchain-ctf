@@ -4,8 +4,6 @@
 
 * [Github Collection of CTFs](https://github.com/blockthreat/blocksec-ctfs.git)
 
-* [Ethernaut Solutions](https://blog.dixitaditya.com/series/ethernaut)
-
 
 <BR />
 
@@ -53,6 +51,29 @@ cp ./hardhat.config.ts ./project/
 ```
 
 Once the challenge is deployed update block number value for forking goerli at ``hardhat.config.ts``
+
+<BR />
+
+
+## Foundry Project Setup Quick Ref
+
+```BASH
+mkdir project
+cd    project
+forge init --no-commit
+
+#If we were cloning some other project, get its dependencies...
+forge install
+
+forge build
+forge test
+```
+
+Copy Files:
+
+```BASH
+cp ./.env  ./project/
+```
 
 
 <BR />
