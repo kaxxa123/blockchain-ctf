@@ -16,3 +16,9 @@
 [submodule "ethernaut/19_Dex/lib/openzeppelin-contracts"]
 	path = ethernaut/19_Dex/lib/openzeppelin-contracts
 	url = https://github.com/OpenZeppelin/openzeppelin-contracts
+[submodule "ethernaut/20_DexTwo/lib/forge-std"]
+	path = ethernaut/20_DexTwo/lib/forge-std
+	url = https://github.com/foundry-rs/forge-std
+[submodule "ethernaut/20_DexTwo/lib/openzeppelin-contracts"]
+	path = ethernaut/20_DexTwo/lib/openzeppelin-contracts
+	url = https://github.com/OpenZeppelin/openzeppelin-contracts
