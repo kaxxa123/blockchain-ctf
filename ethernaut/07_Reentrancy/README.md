@@ -4,9 +4,11 @@
 
 _Steal all the funds from the contract._
 
+
+This contract is vulnerable to re-entrancy and has an underflow bug too.  Re-entrancy allows us to call back and over-withdraw. The underflow vulnerability allows us to get away with the attack as the balance underflow does not throw an error.
+
 The solidity version of the vulnerable contract is very important.
-As from Solidity 0.8.x underflow protection was included. This effectively
-blocks the attack. 
+From Solidity 0.8.x underflow protection is included. This effectively blocks the attack. 
 
 Specifically the withdraw() line:
 ```JS
@@ -59,4 +61,46 @@ attack = await Attack.deployed()
 sender = accounts[5]
 await attack.donate({from: sender, value: 1E16})
 await attack.withdraw("10000000000000000", {from: sender, gas: 100000})
+```
+
+<BR />
+
+
+## Vulnerability Testing Tools
+
+
+<BR />
+
+### Slither
+
+__Bug Detect:__ Reentrancy.
+
+__Bug Not Detect:__ Underflow.
+
+
+```BASH
+solc-select use 0.6.12
+slither ./contracts/Reentrance.sol  --truffle-ignore-compile  --exclude-optimization 
+```
+
+```
+Reentrancy in Reentrance.withdraw(uint256) (contracts/Reentrance.sol#19-27):
+        External calls:
+        - (result) = msg.sender.call{value: _amount}() (contracts/Reentrance.sol#21)
+        State variables written after the call(s):
+        - balances[msg.sender] -= _amount (contracts/Reentrance.sol#25)
+Reference: https://github.com/crytic/slither/wiki/Detector-Documentation#reentrancy-vulnerabilities
+
+Low level call in Reentrance.withdraw(uint256) (contracts/Reentrance.sol#19-27):
+        - (result) = msg.sender.call{value: _amount}() (contracts/Reentrance.sol#21)
+Reference: https://github.com/crytic/slither/wiki/Detector-Documentation#low-level-calls
+
+Parameter Reentrance.donate(address)._to (contracts/Reentrance.sol#10) is not in mixedCase
+Parameter Reentrance.balanceOf(address)._who (contracts/Reentrance.sol#15) is not in mixedCase
+Parameter Reentrance.withdraw(uint256)._amount (contracts/Reentrance.sol#19) is not in mixedCase
+Reference: https://github.com/crytic/slither/wiki/Detector-Documentation#conformance-to-solidity-naming-conventions
+
+Redundant expression "_amount (contracts/Reentrance.sol#23)" inReentrance (contracts/Reentrance.sol#5-31)
+Reference: https://github.com/crytic/slither/wiki/Detector-Documentation#redundant-statements
+./contracts/Reentrance.sol analyzed (1 contracts with 76 detectors), 6 result(s) found
 ```

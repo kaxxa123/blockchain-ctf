@@ -2,6 +2,10 @@
 
 [Vault](https://ethernaut.openzeppelin.com/level/0xBA97454449c10a0F04297022646E7750b8954EE8)
 
+Contract stores password in state storage and hence can be read using `getStorageAt`.
+
+
+<BR />
 
 ## Live Attack
 

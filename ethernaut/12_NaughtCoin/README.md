@@ -2,6 +2,9 @@
 
 [Naught Coins](https://ethernaut.openzeppelin.com/level/0x36E92B2751F260D6a4749d7CA58247E7f8198284)
 
+Player cannot transfer his tokens, but he can approve another account to transfer for him.
+
+
 Contract address: <BR />
 ``0x8060CEbcc7f456df5e43ca89B0c574fd61c8Bf55``
 

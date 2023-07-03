@@ -3,6 +3,8 @@
 [Gatekeeper One](https://ethernaut.openzeppelin.com/level/0x2a2497aE349bCA901Fea458370Bd7dDa594D1D69)
 
 
+The contract controls access to a function through 3 modifiers. To satisfy the enforced restrictions one can pre-compute the expected
+values.
 
 
 ## Test Attack

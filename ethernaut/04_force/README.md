@@ -2,6 +2,8 @@
 
 [Force](https://ethernaut.openzeppelin.com/level/0x46f79002907a025599f355A04A512A6Fd45E671B)
 
+Contract assumes it cannot be forced to receive ETH.
+
 # Test
 
 ```BASH

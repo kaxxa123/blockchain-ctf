@@ -2,6 +2,10 @@
 
 [Alien Codex](https://ethernaut.openzeppelin.com/level/0xd8d8184a9F930F8B0F7AD48F14c7437c12fADF96)
 
+1. `AlienCodex` has an underflow vulnerability on setting the length of a `byte32[]` array state variable.
+1. This allows us to write to any storage location within this contract.
+1. Once the array length is corrupted, we can overwrite the contract owner address.
+
 <BR />
 
 ## Using Foundry with Solidity v0.5.0
@@ -178,3 +182,39 @@ forge install OpenZeppelin/openzeppelin-contracts@v2.5.0 --no-commit
     await contract.owner()
     await contract.contact()
     ```
+
+
+<BR />
+
+## Vulnerability Testing Tools
+
+
+<BR />
+
+### Slither
+
+Bug not detected.
+
+```BASH
+solc-select use 0.5.0
+slither ./src/AlienCodex.sol  --exclude-optimization
+```
+
+```
+Context._msgData() (lib/openzeppelin-contracts/contracts/GSN/Context.sol#23-26) is never used and should be removed
+Reference: https://github.com/crytic/slither/wiki/Detector-Documentation#dead-code
+
+Pragma version^0.5.0 (src/AlienCodex.sol#2) allows old versions
+Pragma version^0.5.0 (lib/openzeppelin-contracts/contracts/GSN/Context.sol#1) allows old versions
+Pragma version^0.5.0 (lib/openzeppelin-contracts/contracts/ownership/Ownable.sol#1) allows old versions
+solc-0.5.0 is not recommended for deployment
+Reference: https://github.com/crytic/slither/wiki/Detector-Documentation#incorrect-versions-of-solidity
+
+Parameter AlienCodex.record(bytes32)._content (src/AlienCodex.sol#20) is not in mixedCase
+Parameter AlienCodex.revise(uint256,bytes32)._content (src/AlienCodex.sol#28) is not in mixedCase
+Reference: https://github.com/crytic/slither/wiki/Detector-Documentation#conformance-to-solidity-naming-conventions
+
+Redundant expression "this (lib/openzeppelin-contracts/contracts/GSN/Context.sol#24)" inContext (lib/openzeppelin-contracts/contracts/GSN/Context.sol#13-27)
+Reference: https://github.com/crytic/slither/wiki/Detector-Documentation#redundant-statements
+./src/AlienCodex.sol analyzed (3 contracts with 76 detectors), 8 result(s) found
+```

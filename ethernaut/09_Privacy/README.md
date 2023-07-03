@@ -2,6 +2,9 @@
 
 [Privacy](https://ethernaut.openzeppelin.com/level/0xcAac6e4994c2e21C5370528221c226D1076CfDAB)
 
+Storing of secrets in state variables. Attack by extracting secret using `getStorageAt`.
+
+
 Contract Address: <BR />
 ``0xDEEA75B0312e042cCD2679574693A19518C930fa``
 

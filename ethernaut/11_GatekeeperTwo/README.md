@@ -2,6 +2,8 @@
 
 [Gatekeeper Two](https://ethernaut.openzeppelin.com/level/0xf59112032D54862E199626F55cFad4F8a3b0Fce9)
 
+The contract controls access to a function through 3 modifiers. To satisfy the enforced restrictions one can pre-compute the expected
+values.
 
 ## Notes
 

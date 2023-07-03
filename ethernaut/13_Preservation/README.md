@@ -2,9 +2,19 @@
 
 [Preservation](https://ethernaut.openzeppelin.com/level/0x2754fA769d47ACdF1f6cDAa4B0A8Ca4eEba651eC)
 
+1. `Preservation` delegates calls to `LibraryContract`. 
+1. Storage for `Preservation` and `LibraryContract` overlaps.
+1. Calling `LibraryContract::setTime()` overwrites an address held in `Preservation`.
+1. Overwriting allow us to replace an instance of `LibraryContract` by a malicious contract.
+1. The malicious contract is then able to overwrite the owner of `Preservation`.
+
+<BR />
+
+
 Contract: <BR />
 ``0xFF3eC9eb96183C2B656588ddD8D80f243c6cA220``
 
+<BR />
 
 ## Test Attack
 
@@ -152,3 +162,56 @@ libctr.target
 ```
 
 <BR />
+
+## Vulnerability Testing Tools
+
+
+<BR />
+
+### Slither
+
+```BASH
+solc-select use 0.8.0
+slither ./contracts/Preservation.sol  --hardhat-ignore-compile  --exclude-optimization
+```
+
+```
+Preservation.setFirstTime(uint256) (contracts/Preservation.sol#22-24) uses delegatecall to a input-controlled function id
+        - timeZone1Library.delegatecall(abi.encodePacked(setTimeSignature,_timeStamp)) (contracts/Preservation.sol#23)
+Preservation.setSecondTime(uint256) (contracts/Preservation.sol#27-29) uses delegatecall to a input-controlled function id
+        - timeZone2Library.delegatecall(abi.encodePacked(setTimeSignature,_timeStamp)) (contracts/Preservation.sol#28)
+Reference: https://github.com/crytic/slither/wiki/Detector-Documentation#controlled-delegatecall
+
+Preservation.setFirstTime(uint256) (contracts/Preservation.sol#22-24) ignores return value by timeZone1Library.delegatecall(abi.encodePacked(setTimeSignature,_timeStamp)) (contracts/Preservation.sol#23)
+Preservation.setSecondTime(uint256) (contracts/Preservation.sol#27-29) ignores return value by timeZone2Library.delegatecall(abi.encodePacked(setTimeSignature,_timeStamp)) (contracts/Preservation.sol#28)
+Reference: https://github.com/crytic/slither/wiki/Detector-Documentation#unchecked-low-level-calls
+
+Preservation.constructor(address,address)._timeZone1LibraryAddress (contracts/Preservation.sol#15) lacks a zero-check on :
+                - timeZone1Library = _timeZone1LibraryAddress (contracts/Preservation.sol#16)
+Preservation.constructor(address,address)._timeZone2LibraryAddress (contracts/Preservation.sol#15) lacks a zero-check on :
+                - timeZone2Library = _timeZone2LibraryAddress (contracts/Preservation.sol#17)
+Reference: https://github.com/crytic/slither/wiki/Detector-Documentation#missing-zero-address-validation
+
+Pragma version^0.8.0 (contracts/Preservation.sol#2) allows old versions
+solc-0.8.0 is not recommended for deployment
+Reference: https://github.com/crytic/slither/wiki/Detector-Documentation#incorrect-versions-of-solidity
+
+Low level call in Preservation.setFirstTime(uint256) (contracts/Preservation.sol#22-24):
+        - timeZone1Library.delegatecall(abi.encodePacked(setTimeSignature,_timeStamp)) (contracts/Preservation.sol#23)
+Low level call in Preservation.setSecondTime(uint256) (contracts/Preservation.sol#27-29):
+        - timeZone2Library.delegatecall(abi.encodePacked(setTimeSignature,_timeStamp)) (contracts/Preservation.sol#28)
+Reference: https://github.com/crytic/slither/wiki/Detector-Documentation#low-level-calls
+
+Parameter Preservation.setFirstTime(uint256)._timeStamp (contracts/Preservation.sol#22) is not in mixedCase
+Parameter Preservation.setSecondTime(uint256)._timeStamp (contracts/Preservation.sol#27) is not in mixedCase
+Constant Preservation.setTimeSignature (contracts/Preservation.sol#13) is not in UPPER_CASE_WITH_UNDERSCORES
+Reference: https://github.com/crytic/slither/wiki/Detector-Documentation#conformance-to-solidity-naming-conventions
+
+Variable Preservation.constructor(address,address)._timeZone1LibraryAddress (contracts/Preservation.sol#15) is too similar to Preservation.constructor(address,address)._timeZone2LibraryAddress (contracts/Preservation.sol#15)
+Variable Preservation.timeZone1Library (contracts/Preservation.sol#7) is too similar to Preservation.timeZone2Library (contracts/Preservation.sol#8)
+Reference: https://github.com/crytic/slither/wiki/Detector-Documentation#variable-names-are-too-similar
+
+Preservation.storedTime (contracts/Preservation.sol#10) is never used in Preservation (contracts/Preservation.sol#4-30)
+Reference: https://github.com/crytic/slither/wiki/Detector-Documentation#unused-state-variable
+./contracts/Preservation.sol analyzed (1 contracts with 76 detectors), 16 result(s) found
+```
