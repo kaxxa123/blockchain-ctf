@@ -1,8 +1,8 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
 
-import "openzeppelin/proxy/Proxy.sol";
-import "openzeppelin/utils/Address.sol";
+import "lib/openzeppelin-contracts/contracts/proxy/Proxy.sol";
+import "lib/openzeppelin-contracts/contracts/utils/Address.sol";
 
 //https://github.com/OpenZeppelin/ethernaut/blob/e2536a8072a72e146b3a22c6f021ae1ffc948288/contracts/contracts/helpers/UpgradeableProxy-08.sol
 

@@ -2,6 +2,11 @@
 
 [Dex](https://ethernaut.openzeppelin.com/level/0x9CB391dbcD447E645D6Cb55dE6ca23164130D008)
 
+
+1. `Dex` sets the swap price based on its token balances.
+1. Price formula is loss making if the user can significantly influence the `Dex` balances.
+1. Attack simply performs a sequence of swaps to drain the `Dex` from one of the tokens.
+
 <BR />
 
 # Attack Test

@@ -2,8 +2,13 @@
 
 [Ethernaut Denial](https://ethernaut.openzeppelin.com/level/0xD0a78dB26AA59694f5Cb536B50ef2fa00155C488)
 
+1. The `Denial` contract is vulnerable to re-entrancy. 
+1. The attack drains the transaction from all gas through repeated re-entrancy.
+1. This causes the remaining part of the `withdraw` function to fail.
+
 Denial Address: <BR />
 `0x41c98A91568513229949638b4db15Bb7D4090F90`
+
 
 <BR />
 
@@ -112,4 +117,68 @@ cast call 0x41c98A91568513229949638b4db15Bb7D4090F90 \
 ```
 
 
+
 <BR />
+
+## Vulnerability Testing Tools
+
+
+<BR />
+
+### Slither
+
+__Bug Detect:__ Vulnerability classifed as "informational".
+
+```BASH
+solc-select use 0.8.0
+slither ./src/Denial.sol  --exclude-optimization
+```
+
+```
+Denial.withdraw() (src/Denial.sol#16-25) sends eth to arbitrary user
+        Dangerous calls:
+        - partner.call{value: amountToSend}() (src/Denial.sol#20)
+Reference: https://github.com/crytic/slither/wiki/Detector-Documentation#functions-that-send-ether-to-arbitrary-destinations
+
+Denial.withdraw() (src/Denial.sol#16-25) ignores return value by partner.call{value: amountToSend}() (src/Denial.sol#20)
+Reference: https://github.com/crytic/slither/wiki/Detector-Documentation#unchecked-low-level-calls
+
+Denial.setWithdrawPartner(address)._partner (src/Denial.sol#11) lacks a zero-check on :
+                - partner = _partner (src/Denial.sol#12)
+Reference: https://github.com/crytic/slither/wiki/Detector-Documentation#missing-zero-address-validation
+
+Reentrancy in Denial.withdraw() (src/Denial.sol#16-25):
+        External calls:
+        - partner.call{value: amountToSend}() (src/Denial.sol#20)
+        External calls sending eth:
+        - partner.call{value: amountToSend}() (src/Denial.sol#20)
+        - address(owner).transfer(amountToSend) (src/Denial.sol#21)
+        State variables written after the call(s):
+        - timeLastWithdrawn = block.timestamp (src/Denial.sol#23)
+        - withdrawPartnerBalances[partner] += amountToSend (src/Denial.sol#24)
+Reference: https://github.com/crytic/slither/wiki/Detector-Documentation#reentrancy-vulnerabilities-2
+
+Pragma version^0.8.0 (src/Denial.sol#2) allows old versions
+solc-0.8.0 is not recommended for deployment
+Reference: https://github.com/crytic/slither/wiki/Detector-Documentation#incorrect-versions-of-solidity
+
+Low level call in Denial.withdraw() (src/Denial.sol#16-25):
+        - partner.call{value: amountToSend}() (src/Denial.sol#20)
+Reference: https://github.com/crytic/slither/wiki/Detector-Documentation#low-level-calls
+
+Parameter Denial.setWithdrawPartner(address)._partner (src/Denial.sol#11) is not in mixedCase
+Constant Denial.owner (src/Denial.sol#7) is not in UPPER_CASE_WITH_UNDERSCORES
+Reference: https://github.com/crytic/slither/wiki/Detector-Documentation#conformance-to-solidity-naming-conventions
+
+Reentrancy in Denial.withdraw() (src/Denial.sol#16-25):
+        External calls:
+        - address(owner).transfer(amountToSend) (src/Denial.sol#21)
+        External calls sending eth:
+        - partner.call{value: amountToSend}() (src/Denial.sol#20)
+        - address(owner).transfer(amountToSend) (src/Denial.sol#21)
+        State variables written after the call(s):
+        - timeLastWithdrawn = block.timestamp (src/Denial.sol#23)
+        - withdrawPartnerBalances[partner] += amountToSend (src/Denial.sol#24)
+Reference: https://github.com/crytic/slither/wiki/Detector-Documentation#reentrancy-vulnerabilities-4
+./src/Denial.sol analyzed (1 contracts with 76 detectors), 10 result(s) found
+```

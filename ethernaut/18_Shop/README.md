@@ -2,6 +2,8 @@
 
 [Shop](https://ethernaut.openzeppelin.com/level/0xCb1c7A4Dee224bac0B47d0bE7bb334bac235F842)
 
+`Shop` calls untrusted code provided by the caller contract.
+
 <BR />
 
 ## Attack Test
