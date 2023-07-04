@@ -182,3 +182,222 @@ Reentrancy in Denial.withdraw() (src/Denial.sol#16-25):
 Reference: https://github.com/crytic/slither/wiki/Detector-Documentation#reentrancy-vulnerabilities-4
 ./src/Denial.sol analyzed (1 contracts with 76 detectors), 10 result(s) found
 ```
+
+<BR />
+
+### Mythril
+
+__Bug Detect__ 
+
+```BASH
+docker run --rm `
+        -v /c/temp/QuickTest/blockchain-ctf/ethernaut/17_Denial:/share `
+        mythril/myth `
+        analyze /share/src/Denial.sol `
+        --solv 0.8.0
+```
+
+```
+==== External Call To User-Supplied Address ====
+SWC ID: 107
+Severity: Low
+Contract: Denial
+Function name: withdraw()
+PC address: 381
+Estimated Gas Usage: 14943 - 124543
+A call to a user-supplied address is executed.
+An external message call to an address specified by the caller is executed. Note that the callee account might contain arbitrary code and could re-enter any function within this contract. Reentering the contract in an intermediate state may lead to unexpected behaviour. Make sure that no state modifications are executed after this call and/or reentrancy guards are in place.
+--------------------
+In file: /share/src/Denial.sol:20
+
+partner.call{value:amountToSend}("")
+
+--------------------
+Initial State:
+
+Account: [CREATOR], balance: 0x0, nonce:0, storage:{}
+Account: [ATTACKER], balance: 0x0, nonce:0, storage:{}
+
+Transaction Sequence:
+
+Caller: [CREATOR], calldata: , decoded_data: , value: 0x0
+Caller: [CREATOR], function: setWithdrawPartner(address), txdata: 0x4e1c5914000000000000000000000000deadbeefdeadbeefdeadbeefdeadbeefdeadbeef, decoded_data: ('0xdeadbeefdeadbeefdeadbeefdeadbeefdeadbeef',), value: 0x0
+Caller: [ATTACKER], function: withdraw(), txdata: 0x3ccfd60b, value: 0x0
+
+==== Unchecked return value from external call. ====
+SWC ID: 104
+Severity: Medium
+Contract: Denial
+Function name: withdraw()
+PC address: 381
+Estimated Gas Usage: 14943 - 124543
+The return value of a message call is not checked.
+External calls return a boolean value. If the callee halts with an exception, 'false' is returned and execution continues in the caller. The caller should check whether an exception happened and react accordingly to avoid unexpected behavior. For example it is often desirable to wrap external calls in require() so the transaction is reverted if the call fails.
+--------------------
+In file: /share/src/Denial.sol:20
+
+partner.call{value:amountToSend}("")
+
+--------------------
+Initial State:
+
+Account: [CREATOR], balance: 0x0, nonce:0, storage:{}
+Account: [ATTACKER], balance: 0x0, nonce:0, storage:{}
+
+Transaction Sequence:
+
+Caller: [CREATOR], calldata: , decoded_data: , value: 0x0
+Caller: [CREATOR], function: withdraw(), txdata: 0x3ccfd60b, value: 0x0
+Caller: [CREATOR], function: withdraw(), txdata: 0x3ccfd60b, value: 0x0
+
+==== Multiple Calls in a Single Transaction ====
+SWC ID: 113
+Severity: Low
+Contract: Denial
+Function name: withdraw()
+PC address: 487
+Estimated Gas Usage: 14943 - 124543
+Multiple calls are executed in the same transaction.
+This call is executed following another call within the same transaction. It is possible that the call never gets executed if a prior call 
+fails permanently. This might be caused intentionally by a malicious callee. If possible, refactor the code such that each transaction only executes one external call or make sure that all callees can be trusted (i.e. they’re part of your own codebase).
+--------------------
+In file: /share/src/Denial.sol:21
+
+payable(owner).transfer(amountToSend)
+
+--------------------
+Initial State:
+
+Account: [CREATOR], balance: 0x0, nonce:0, storage:{}
+Account: [ATTACKER], balance: 0x0, nonce:0, storage:{}
+
+Transaction Sequence:
+
+Caller: [CREATOR], calldata: , decoded_data: , value: 0x0
+Caller: [CREATOR], function: withdraw(), txdata: 0x3ccfd60b, value: 0x0
+
+==== State access after external call ====
+SWC ID: 107
+Severity: Low
+Contract: Denial
+Function name: withdraw()
+PC address: 487
+Estimated Gas Usage: 14943 - 124543
+Write to persistent state following external call
+The contract account state is accessed after an external call to a fixed address. To prevent reentrancy issues, consider accessing the state only before the call, especially if the callee is untrusted. Alternatively, a reentrancy lock can be used to prevent untrusted callees from re-entering the contract in an intermediate state.
+--------------------
+In file: /share/src/Denial.sol:21
+
+payable(owner).transfer(amountToSend)
+
+--------------------
+Initial State:
+
+Account: [CREATOR], balance: 0x24, nonce:0, storage:{}
+Account: [ATTACKER], balance: 0x0, nonce:0, storage:{}
+
+Transaction Sequence:
+
+Caller: [CREATOR], calldata: , decoded_data: , value: 0x0
+Caller: [CREATOR], function: unknown, txdata: 0x, decoded_data: , value: 0x0
+Caller: [CREATOR], function: withdraw(), txdata: 0x3ccfd60b, value: 0x0
+
+==== State access after external call ====
+SWC ID: 107
+Severity: Low
+Contract: Denial
+Function name: withdraw()
+PC address: 516
+Estimated Gas Usage: 14943 - 124543
+Write to persistent state following external call
+The contract account state is accessed after an external call to a fixed address. To prevent reentrancy issues, consider accessing the state only before the call, especially if the callee is untrusted. Alternatively, a reentrancy lock can be used to prevent untrusted callees from re-entering the contract in an intermediate state.
+--------------------
+In file: /share/src/Denial.sol:23
+
+timeLastWithdrawn = block.timestamp
+
+--------------------
+Initial State:
+
+Account: [CREATOR], balance: 0x0, nonce:0, storage:{}
+Account: [ATTACKER], balance: 0x0, nonce:0, storage:{}
+
+Transaction Sequence:
+
+Caller: [CREATOR], calldata: , decoded_data: , value: 0x0
+Caller: [CREATOR], function: withdraw(), txdata: 0x3ccfd60b, value: 0x0
+
+==== State access after external call ====
+SWC ID: 107
+Severity: Low
+Contract: Denial
+Function name: withdraw()
+PC address: 527
+Estimated Gas Usage: 14943 - 124543
+Read of persistent state following external call
+The contract account state is accessed after an external call to a fixed address. To prevent reentrancy issues, consider accessing the state only before the call, especially if the callee is untrusted. Alternatively, a reentrancy lock can be used to prevent untrusted callees from re-entering the contract in an intermediate state.
+--------------------
+In file: /share/src/Denial.sol:24
+
+partner
+
+--------------------
+Initial State:
+
+Account: [CREATOR], balance: 0x0, nonce:0, storage:{}
+Account: [ATTACKER], balance: 0x0, nonce:0, storage:{}
+
+Transaction Sequence:
+
+Caller: [CREATOR], calldata: , decoded_data: , value: 0x0
+Caller: [CREATOR], function: withdraw(), txdata: 0x3ccfd60b, value: 0x0
+
+==== State access after external call ====
+SWC ID: 107
+Severity: Low
+Contract: Denial
+Function name: withdraw()
+PC address: 619
+Estimated Gas Usage: 14943 - 124543
+Read of persistent state following external call
+The contract account state is accessed after an external call to a fixed address. To prevent reentrancy issues, consider accessing the state only before the call, especially if the callee is untrusted. Alternatively, a reentrancy lock can be used to prevent untrusted callees from re-entering the contract in an intermediate state.
+--------------------
+In file: /share/src/Denial.sol:24
+
+withdrawPartnerBalances[partner] +=  amountToSend
+
+--------------------
+Initial State:
+
+Account: [CREATOR], balance: 0x0, nonce:0, storage:{}
+
+Transaction Sequence:
+
+Caller: [CREATOR], calldata: , decoded_data: , value: 0x0
+Caller: [CREATOR], function: withdraw(), txdata: 0x3ccfd60b, value: 0x0
+
+==== State access after external call ====
+SWC ID: 107
+Severity: Low
+Contract: Denial
+Function name: withdraw()
+PC address: 635
+Estimated Gas Usage: 14943 - 124543
+Write to persistent state following external call
+The contract account state is accessed after an external call to a fixed address. To prevent reentrancy issues, consider accessing the state only before the call, especially if the callee is untrusted. Alternatively, a reentrancy lock can be used to prevent untrusted callees from re-entering the contract in an intermediate state.
+--------------------
+In file: /share/src/Denial.sol:24
+
+withdrawPartnerBalances[partner] +=  amountToSend
+
+--------------------
+Initial State:
+
+Account: [CREATOR], balance: 0x0, nonce:0, storage:{}
+Account: [ATTACKER], balance: 0x0, nonce:0, storage:{}
+
+Transaction Sequence:
+
+Caller: [CREATOR], calldata: , decoded_data: , value: 0x0
+Caller: [CREATOR], function: withdraw(), txdata: 0x3ccfd60b, value: 0x0
+```

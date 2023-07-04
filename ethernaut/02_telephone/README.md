@@ -33,8 +33,6 @@ telephone.owner()
 
 ## Vulnerability Testing Tools
 
-This is a logical bug, so one can expect test tools not to catch it.
-
 <BR />
 
 ### Slither
@@ -57,4 +55,47 @@ Reference: https://github.com/crytic/slither/wiki/Detector-Documentation#incorre
 Parameter Telephone.changeOwner(address)._owner (contracts/Telephone.sol#12) is not in mixedCase
 Reference: https://github.com/crytic/slither/wiki/Detector-Documentation#conformance-to-solidity-naming-conventions
 ./contracts/Telephone.sol analyzed (1 contracts with 76 detectors), 4 result(s) found
+```
+
+<BR />
+
+### Mythril
+
+__Bug Detected__
+
+```BASH
+docker run --rm `
+        -v /c/temp/QuickTest/blockchain-ctf/ethernaut/02_telephone:/share `
+        mythril/myth `
+        analyze /share/contracts/Telephone.sol `
+        --solv 0.8.0
+```
+
+```
+==== Dependence on tx.origin ====
+SWC ID: 115
+Severity: Low
+Contract: Telephone
+Function name: changeOwner(address)
+PC address: 204
+Estimated Gas Usage: 466 - 561
+Use of tx.origin as a part of authorization control.
+The tx.origin environment variable has been found to influence a control flow decision. Note that using tx.origin as a security control might cause a situation where a user inadvertently authorizes a smart contract to perform an action on their behalf. It is recommended to use msg.sender instead.
+--------------------
+In file: /share/contracts/Telephone.sol:13
+
+if (tx.origin != msg.sender) {
+      owner = _owner;
+    }
+
+--------------------
+Initial State:
+
+Account: [CREATOR], balance: 0x0, nonce:0, storage:{}
+Account: [ATTACKER], balance: 0x0, nonce:0, storage:{}
+
+Transaction Sequence:
+
+Caller: [CREATOR], calldata: , decoded_data: , value: 0x0
+Caller: [CREATOR], function: changeOwner(address), txdata: 0xa6f9dae10000000000000000000000000000000000000000000000000000000000000000, decoded_data: ('0x0000000000000000000000000000000000000000',), value: 0x0
 ```

@@ -78,3 +78,22 @@ Reference: https://github.com/crytic/slither/wiki/Detector-Documentation#reentra
 ./contracts/King.sol analyzed (1 contracts with 76 detectors), 4 result(s) found
 ```
 
+<BR />
+
+### Mythril
+
+Reentrancy not detected
+
+```BASH
+docker run --rm `
+        -v /c/temp/QuickTest/blockchain-ctf/ethernaut/06_king:/share `
+        mythril/myth `
+        analyze /share/contracts/King.sol `
+        --solv 0.8.0
+```
+
+```
+The analysis was completed successfully. No issues were detected
+```
+
+<BR />

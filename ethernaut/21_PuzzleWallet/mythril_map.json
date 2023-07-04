@@ -1,0 +1,10 @@
+{
+    "remappings": [ 
+        "lib/=/share/lib/"
+     ],
+     "optimizer": {
+       "enabled": true,
+       "runs": 200
+     }
+}
+    

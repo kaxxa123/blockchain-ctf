@@ -218,3 +218,37 @@ Redundant expression "this (lib/openzeppelin-contracts/contracts/GSN/Context.sol
 Reference: https://github.com/crytic/slither/wiki/Detector-Documentation#redundant-statements
 ./src/AlienCodex.sol analyzed (3 contracts with 76 detectors), 8 result(s) found
 ```
+
+<BR />
+
+### Mythril
+
+Doesn't work maybe its the solidity version `0.5.x` (Mythril version v0.23.24).
+
+```BASH
+docker run --rm `
+        -v /c/temp/QuickTest/blockchain-ctf/ethernaut/16_AlienCodex:/share `
+        mythril/myth `
+        analyze /share/src/AlienCodex.sol `
+        --solc-json /share/mythril_map.json `
+        --solv 0.5.0
+```
+
+```
+mythril.interfaces.cli [ERROR]: Traceback (most recent call last):
+  File "/usr/local/lib/python3.10/site-packages/mythril/interfaces/cli.py", line 967, in parse_args_and_execute
+    execute_command(
+  File "/usr/local/lib/python3.10/site-packages/mythril/interfaces/cli.py", line 868, in execute_command
+    "json": report.as_json(),
+  File "/usr/local/lib/python3.10/site-packages/mythril/analysis/report.py", line 304, in as_json
+    return json.dumps(result, sort_keys=True)
+  File "/usr/local/lib/python3.10/json/__init__.py", line 238, in dumps
+    **kw).encode(obj)
+  File "/usr/local/lib/python3.10/json/encoder.py", line 199, in encode
+    chunks = self.iterencode(o, _one_shot=True)
+  File "/usr/local/lib/python3.10/json/encoder.py", line 257, in iterencode
+    return _iterencode(o, 0)
+  File "/usr/local/lib/python3.10/json/encoder.py", line 179, in default
+    raise TypeError(f'Object of type {o.__class__.__name__} '
+TypeError: Object of type bytes is not JSON serializable
+```
