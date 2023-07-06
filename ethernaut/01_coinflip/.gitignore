@@ -1,6 +1,9 @@
 *.swp
 *.swo
 
+# echidna
+crytic-export
+
 # Logs
 logs
 *.log
