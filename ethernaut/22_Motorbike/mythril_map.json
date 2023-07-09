@@ -1,0 +1,9 @@
+{
+    "remappings": [ 
+        "openzeppelin-contracts/=/share/lib/openzeppelin-contracts/contracts/"
+     ],
+     "optimizer": {
+       "enabled": true,
+       "runs": 200
+     }
+}

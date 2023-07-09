@@ -1,3 +1,7 @@
+# echidna
+crytic-export
+coverage
+
 # Compiler files
 cache/
 out/
