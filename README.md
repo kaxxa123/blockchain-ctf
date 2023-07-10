@@ -1,2 +1,4 @@
 # blockchain-ctf
-Capture the flag exercises
+Solutions capture the flag exercises
+
+* [Ethernaut CTF](./ethernaut/README.md)
