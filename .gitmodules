@@ -34,9 +34,9 @@
 [submodule "ethernaut/22_Motorbike/lib/openzeppelin-contracts"]
 	path = ethernaut/22_Motorbike/lib/openzeppelin-contracts
 	url = https://github.com/OpenZeppelin/openzeppelin-contracts
-[submodule "ethernaut/23_DoubleEntryPoint/lib\\forge-std"]
-	path = ethernaut/23_DoubleEntryPoint/lib\\forge-std
+[submodule "ethernaut/23_DoubleEntryPoint/lib/forge-std"]
+	path = ethernaut/23_DoubleEntryPoint/lib/forge-std
 	url = https://github.com/foundry-rs/forge-std
-[submodule "ethernaut/23_DoubleEntryPoint/lib\\openzeppelin-contracts"]
-	path = ethernaut/23_DoubleEntryPoint/lib\\openzeppelin-contracts
+[submodule "ethernaut/23_DoubleEntryPoint/lib/openzeppelin-contracts"]
+	path = ethernaut/23_DoubleEntryPoint/lib/openzeppelin-contracts
 	url = https://github.com/OpenZeppelin/openzeppelin-contracts
