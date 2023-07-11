@@ -16,6 +16,9 @@ contract Coin {
         balances[wallet_] = 10**6;
     }
 
+    // AlexZ: Transfer notifies receiving contract of amount transfered.
+    //        We just need to fail with NotEnoughBalance() when notify() 
+    //        is called.
     function transfer(address dest_, uint256 amount_) external {
         uint256 currentBalance = balances[msg.sender];
 

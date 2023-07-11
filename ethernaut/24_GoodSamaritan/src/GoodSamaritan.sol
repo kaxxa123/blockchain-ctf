@@ -16,6 +16,10 @@ contract GoodSamaritan {
     }
 
     function requestDonation() external returns(bool enoughBalance){
+
+        // AlexZ: If donate10() failes with "NotEnoughBalance()"
+        //        the catch triggers transferring ALL balance.
+        //
         // donate 10 coins to requester
         try wallet.donate10(msg.sender) {
             return true;

@@ -4,12 +4,28 @@
 
 _drain all the balance from his Wallet_
 
+1. `GoodSamaritan` gives away 10 tokens for free when `requestDonation` is invoked...
+1. ...unless its call to `donate10()` fails with `NotEnoughBalance()`...
+1. ...in which case it hands over the entire balance.
+1. We can raise this error at the `notify` call within the receiving contract.
 
-```BASH
-solc-select install 0.8.19
-solc-select use 0.8.19
 
-# slither ./src/CryptoVault.sol --print contract-summary  \
-#        --solc-remaps "openzeppelin-contracts/=lib/openzeppelin-contracts/contracts/"
+<BR />
+
+## Attack Test
+
+```DASH
+forge test -vvvv
 ```
 
+
+<BR />
+
+## Live Attack
+
+```BASH
+./attackDeploy.sh
+./attackDo.sh
+```
+
+<BR />

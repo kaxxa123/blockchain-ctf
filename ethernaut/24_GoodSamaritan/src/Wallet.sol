@@ -23,6 +23,8 @@ contract Wallet {
         owner = msg.sender;
     }
 
+    //AlexZ: We just need to cause this to fail with NotEnoughBalance()
+    //       ...when coin.transfer() is invoked.
     function donate10(address dest_) external onlyOwner {
         // check balance left
         if (coin.balances(address(this)) < 10) {
