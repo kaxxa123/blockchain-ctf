@@ -6,6 +6,9 @@ import "openzeppelin-contracts/token/ERC20/ERC20.sol";
 import "./Interfaces.sol";
 import "./Forta.sol";
 
+// AlexZ: An ERC20 that support the DelegateERC20 interface...
+//  Set as the underlying token for CryptoVault
+//  Thus it may be passed to LegacyToken as the target to which transfers should be delegated.
 contract DoubleEntryPoint is ERC20("DoubleEntryPointToken", "DET"), DelegateERC20, Ownable(msg.sender) {
     address public cryptoVault;
     address public player;
@@ -25,6 +28,8 @@ contract DoubleEntryPoint is ERC20("DoubleEntryPointToken", "DET"), DelegateERC2
         _;
     }
 
+    // AlexZ: Allows player to verify a delegateTransfer call...
+    //      Giving the player an opportunity to revert.
     modifier fortaNotify() {
         address detectionBot = address(forta.usersDetectionBots(player));
 
