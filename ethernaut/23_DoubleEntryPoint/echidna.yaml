@@ -1,0 +1,6 @@
+# provide solc remappings to crytic-compile
+cryticArgs: ['--solc-remaps', 'openzeppelin-contracts/=lib/openzeppelin-contracts/contracts/']
+sender: ["0x10000", "0x20000", "0x30000"]
+multi-abi: true
+filterBlacklist: true
+filterFunctions: ["DoubleEntryPoint.transfer(address,uint256)", "DoubleEntryPoint.transferFrom(address,address,uint256)"]
