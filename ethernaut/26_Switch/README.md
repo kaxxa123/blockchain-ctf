@@ -55,3 +55,19 @@ _flip the switch_
 
 <BR />
 
+## Vulnerability Testing Tools
+
+Testing Invariant: _Switch should never be on._
+
+
+Neither [Echidna](./src/echidna/EchidnaFuzz.sol) nor [Foundry](./test/InvariantTest.t.sol) fuzzing manage to generate the magic value that turns the switch on. 
+
+Interestingly Foundry manages to break the [invariant](./test/InvariantTest.t.sol) by doing something that is impossible in real-live. It sends transactions to the `Switch` contract where the sender has the `Switch` contract address. This was disabled using: <BR />
+
+```JS
+excludeSender(address(singlePole));
+```
+
+<BR />
+
+

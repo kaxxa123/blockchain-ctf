@@ -1,0 +1,3 @@
+# provide solc remappings to crytic-compile
+sender: ["0x10000", "0x20000", "0x30000"]
+multi-abi: true
