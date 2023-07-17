@@ -62,6 +62,8 @@ Invariant: _Underlying token balance should not change._
 make echidna
 ```
 
+![Echidna Test Report](./echidna_report.png "Echidna Test Report")
+
 <BR />
 
 
